@@ -6,7 +6,7 @@ creates an empty array. */
 const itens = JSON.parse(localStorage.getItem("itens")) || [];
 
 itens.forEach( (elemento) => {
-    console.log(elemento.nome, elemento.quantidade);
+    criaElemento(elemento);
 })
 
 
@@ -18,8 +18,18 @@ form.addEventListener("submit", (evento) => {
 
     const nome = evento.target.elements['nome'];
     const quantidade = evento.target.elements['quantidade'];
+
+    const itemAtual = {
+        "nome": nome.value,
+        "quantidade": quantidade.value
+    }
+
     
-    criaElemento(nome.value, quantidade.value);
+    criaElemento(itemAtual);
+
+    itens.push(itemAtual);
+
+    localStorage.setItem("itens", JSON.stringify(itens));
 
     nome.value = '';
     quantidade.value = '';
@@ -31,33 +41,21 @@ form.addEventListener("submit", (evento) => {
  * @param nome - the name of the item
  * @param quantidade - the number of items
  */
-function criaElemento(nome, quantidade) {
+function criaElemento(item) {
 
     const novoItem = document.createElement('li');
     novoItem.classList.add("item");
 
     /* Creating a new strong element and adding the quantity to it. */
     const numeroItem = document.createElement('strong');
-    numeroItem.innerHTML = quantidade;
+    numeroItem.innerHTML = item.quantidade;
 
     /* Adding the name and quantity to the list item. */
     novoItem.appendChild(numeroItem);
-    novoItem.innerHTML += nome;
+    novoItem.innerHTML += item.nome;
 
     /* Adding the new item to the list. */
     lista.appendChild(novoItem);
 
-
-    /* Creating an object with the name and quantity. */
-    const itemAtual = { 
-        "nome": nome,
-        "quantidade": quantidade
-    };
-
-    /* Adding the item to the array. */
-    itens.push(itemAtual);
-   
-    /* Saving the item to local storage. */
-    localStorage.setItem("itens", JSON.stringify(itens));
-    
+  
 }
