@@ -1,5 +1,14 @@
 const form = document.getElementById("novoItem")//formulário
-const lista =document.getElementById("lista");
+const lista = document.getElementById("lista");
+
+/* Getting the items from local storage and parsing them into an array. If there are no items, it
+creates an empty array. */
+const itens = JSON.parse(localStorage.getItem("itens")) || [];
+
+itens.forEach( (elemento) => {
+    console.log(elemento.nome, elemento.quantidade);
+})
+
 
 /* Adding an event listener to the form. When the form is submitted, it prevents the default action,
 gets the values of the name and quantity, and then calls the function criaElemento. It then resets
@@ -39,9 +48,16 @@ function criaElemento(nome, quantidade) {
     lista.appendChild(novoItem);
 
 
+    /* Creating an object with the name and quantity. */
+    const itemAtual = { 
+        "nome": nome,
+        "quantidade": quantidade
+    };
 
+    /* Adding the item to the array. */
+    itens.push(itemAtual);
+   
+    /* Saving the item to local storage. */
+    localStorage.setItem("itens", JSON.stringify(itens));
     
-   /* Saving the name and quantity to local storage. */
-    localStorage.setItem("nome", nome);
-    localStorage.setItem("quantidade", quantidade);
 }
