@@ -58,7 +58,7 @@ form.addEventListener("submit", (evento) => {
 
     nome.value = '';
     quantidade.value = '';
-    
+
 });
 
 
@@ -88,6 +88,10 @@ function criaElemento(item) {
     novoItem.appendChild(numeroItem);
     novoItem.innerHTML += item.nome;
 
+
+    novoItem.appendChild(botaoDeleta());
+
+
     /* Adding the new item to the list. */
     lista.appendChild(novoItem);
 
@@ -104,3 +108,24 @@ function atualizaElemento(item) {
 
     document.querySelector("[data-id='"+item.id+"']").innerHTML = item.quantidade;
 }
+
+
+/**
+ * It creates a button element, sets its text to "X", adds an event listener to it, and returns it.
+ * @returns the elementoBotao.
+ */
+function botaoDeleta() {
+    const elementoBotao = document.createElement("button");
+    elementoBotao.innerText = "X";
+
+    elementoBotao.addEventListener("click", function (){
+        deletaElemento(this.parentNode);
+    });
+
+    return elementoBotao;
+}
+
+function deletaElemento (tag) {
+
+    tag.remove();
+}   
