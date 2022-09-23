@@ -12,12 +12,12 @@ itens.forEach( (elemento) => {
 
 
 
-/* Adding an event listener to the form. When the form is submitted, it prevents the default
-action, and then it gets the name and quantity from the form. It then checks if the item already
-exists
-in the array, and if it does, it updates the item's quantity. If it doesn't, it creates a new item
-and
-adds it to the array. Finally, it saves the array to local storage and clears the form. */
+
+/* It's adding an event listener to the form. When the form is submitted, it prevents the default
+action, gets the name and quantity from the form, checks if the item already exists in the array,
+creates a new object with the name and quantity from the form, checks if the item already exists in
+the array. If it does, it updates the item's quantity. If it doesn't, it creates a new item and adds
+it to the array. It then updates the local storage with the new array. Finally, it clears the form. */
 form.addEventListener("submit", (evento) => {
     evento.preventDefault();
 
@@ -42,10 +42,13 @@ form.addEventListener("submit", (evento) => {
 
         atualizaElemento(itemAtual);
 
-        itens[existe.id] = itemAtual;
+        /* It's updating the item in the array. */
+        itens[itens.findIndex(elemento => elemento.id === existe.id)] = itemAtual;
 
      }else{
-        itemAtual.id = itens.lenght;
+        /* It's checking if the array is empty, and if it is, it sets the id to 0. If it isn't, it sets
+        the id to the id of the last item in the array. */
+        itemAtual.id = itens[itens.lenght - 1] ? (itens[itens.lenght-1]).id  : 0;
 
         criaElemento(itemAtual);
 
@@ -89,7 +92,7 @@ function criaElemento(item) {
     novoItem.innerHTML += item.nome;
 
 
-    novoItem.appendChild(botaoDeleta());
+    novoItem.appendChild(botaoDeleta(item.id));
 
 
     /* Adding the new item to the list. */
@@ -110,22 +113,29 @@ function atualizaElemento(item) {
 }
 
 
-/**
- * It creates a button element, sets its text to "X", adds an event listener to it, and returns it.
- * @returns the elementoBotao.
- */
-function botaoDeleta() {
+
+function botaoDeleta(id) {
     const elementoBotao = document.createElement("button");
     elementoBotao.innerText = "X";
 
     elementoBotao.addEventListener("click", function (){
-        deletaElemento(this.parentNode);
+        deletaElemento(this.parentNode, id);
     });
 
     return elementoBotao;
 }
 
-function deletaElemento (tag) {
+
+/**
+ * It removes the element from the DOM and from the array.
+ * @param tag - the element that will be deleted
+ * @param id - the id of the item to be deleted
+ */
+function deletaElemento (tag, id) {
 
     tag.remove();
+
+    itens.splice(itens.findIndex(elemento => elemento.id === id), 1);
+
+    localStorage.setItem("itens", JSON.stringify(itens));
 }   
